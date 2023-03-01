@@ -1,0 +1,31 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Containers\AppSection\Notification\Providers;
+
+use App\Ship\Parents\Providers\MainProvider;
+
+/**
+ * The Main Service Provider of this container, it will be automatically registered in the framework.
+ */
+class MainServiceProvider extends MainProvider
+{
+    public array $serviceProviders = [
+        EventServiceProvider::class,
+    ];
+
+    public array $aliases = [
+        // 'Foo' => Bar::class,
+    ];
+
+    public function register(): void
+    {
+        parent::register();
+    }
+
+    public function boot(): void
+    {
+        parent::boot();
+    }
+}

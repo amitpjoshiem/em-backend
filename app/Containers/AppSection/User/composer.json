@@ -1,0 +1,10 @@
+{
+    "name": "apiato/user",
+    "description": "apiato Container for apiato.",
+    "type": "apiato-container",
+    "require": {
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    }
+}

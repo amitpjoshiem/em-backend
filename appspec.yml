@@ -1,0 +1,21 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/swd-backend
+permissions:
+  - object: /home/ubuntu/swd-backend
+    owner: ubuntu
+    group: ubuntu
+    type:
+      - directory
+      - file
+hooks:
+  BeforeInstall:
+    - location: deploy/before_install.sh
+      timeout: 300
+      runas: ubuntu
+  AfterInstall:
+    - location: deploy/after_install.sh
+      timeout: 900
+      runas: ubuntu

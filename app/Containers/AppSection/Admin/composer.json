@@ -1,0 +1,6 @@
+{
+  "name": "apiato/admin",
+  "description": "Admin Container for apiato.",
+  "require": {
+  }
+}

@@ -1,0 +1,182 @@
+version: '3.4'
+services:
+  # Redis Service
+
+  # MySQL Service
+  swd_mysql:
+    image: mysql:5.7
+    container_name: swd_mysql
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./docker/mysql:/docker-entrypoint-initdb.d
+      - mysql-volumes:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+    networks:
+      - app-network
+    # We need to run healthcheck because we need to make sure that the initial & default database has been created
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping"]
+      interval: 2s
+      timeout: 20s
+      retries: 10
+
+  # Php-FPM Service
+  swd_app:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+      target: php-base-image
+      args:
+        APP_USER: www-data
+        USER_ID: 1000
+        GROUP_ID: 1000
+    container_name: swd_app
+    volumes:
+      - ./:/var/www/html
+      - php-profiling:/var/www/profiles
+    working_dir: /var/www/html
+    depends_on:
+      - swd_queue
+      - swd_mysql
+      - swd_rabbitmq
+      - swd_redis
+    environment:
+      CONTAINER_ROLE: app
+      XDEBUG: default
+    networks:
+      - app-network  # Php-FPM Service
+
+  swd_cron:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+      target: php-base-image
+      args:
+        APP_USER: www-data
+        USER_ID: 1000
+        GROUP_ID: 1000
+    container_name: swd_cron
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    depends_on:
+      - swd_queue
+      - swd_mysql
+      - swd_rabbitmq
+      - swd_redis
+    environment:
+      CONTAINER_ROLE: cron
+    networks:
+      - app-network
+
+  swd_queue:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+      target: php-base-image
+      args:
+        APP_USER: www-data
+        USER_ID: 1000
+        GROUP_ID: 1000
+    container_name: swd_queue
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    depends_on:
+      - swd_rabbitmq
+      - swd_mysql
+      - swd_redis
+    environment:
+      CONTAINER_ROLE: queue
+    networks:
+      - app-network
+
+  swd_centrifugo:
+    container_name: swd_centrifugo
+    image: centrifugo/centrifugo:v3
+    volumes:
+      - ./docker/centrifugo:/centrifugo
+    command: centrifugo -c config.json
+    ports:
+      - '8000:8000'
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+    networks:
+      - app-network
+
+  swd_redis:
+    build:
+      context: .
+      dockerfile: docker/redis/Dockerfile
+    container_name: swd_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-volumes:/data:rw
+      - ./docker/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - app-network
+    privileged: true
+    command: sh -c "./init.sh"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  #xhprof Service
+  swd_xhprof:
+    image: tuimedia/xhprof-docker:0.9.4
+    container_name: swd_xhprof
+    volumes:
+      - php-profiling:/profiles
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+
+  #Nginx Service
+  swd_nginx:
+    image: nginx:alpine
+    container_name: swd_nginx
+    environment:
+      API_HOST: swd_app
+    volumes:
+      - ./docker/nginx/templates:/etc/nginx/templates
+      - ./docker/nginx/auth:/etc/nginx/htpasswd
+      - ./:/var/www/html
+    depends_on:
+      - swd_app
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+
+  swd_rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'swd_rabbitmq'
+    volumes:
+      - ./docker/rabbitmq/config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./docker/rabbitmq/config/definitions.json:/etc/rabbitmq/definitions.json
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - app-network
+
+
+volumes:
+  mysql-volumes:
+  test_mysql-volumes:
+  redis-volumes:
+  php-profiling:
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge

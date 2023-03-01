@@ -1,0 +1,12 @@
+{
+    "name": "apiato/authentication",
+    "description": "apiato Container.",
+    "type": "apiato-container",
+    "require": {
+        "lcobucci/jwt": "^4.1.2",
+        "laravel/passport": "^10.1.0"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    }
+}

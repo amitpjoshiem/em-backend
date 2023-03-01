@@ -1,0 +1,28 @@
+@import "~bootstrap/scss/bootstrap";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/brands";
+@import "~choices.js/public/assets/styles/base.min.css";
+@import "~choices.js/public/assets/styles/choices.min.css";
+
+.w-10 {
+  width: 10%;
+}
+
+.breadcrumb a {
+    color: gray;
+}
+
+.page-link {
+    color: black !important;
+}
+
+.tool-button {
+    border: #0b5ed7;
+    border-radius: 10px;
+}
+
+.admin-icon {
+    height: 50px;
+}

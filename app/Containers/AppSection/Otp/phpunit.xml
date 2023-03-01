@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" backupGlobals="false"
+         backupStaticAttributes="false" bootstrap="../../../../vendor/autoload.php" colors="true" convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true" convertWarningsToExceptions="true" processIsolation="false"
+         stopOnFailure="false">
+        <coverage includeUncoveredFiles="true" processUncoveredFiles="false">
+            <include>
+              <directory suffix=".php">.</directory>
+            </include>
+        </coverage>
+        <testsuites>
+            <testsuite name="Otp">
+                <directory suffix="Test.php">.</directory>
+            </testsuite>
+        </testsuites>
+        <php>
+            <env name="API_FULL_URL" value="https://localhost/api"/>
+                <server name="API_RATE_LIMIT_ENABLED" value="false"/>
+                <server name="APP_ENV" value="testing"/>
+                <server name="BCRYPT_ROUNDS" value="4"/>
+                <server name="DB_CONNECTION" value="mysql"/>
+                <server name="DB_DATABASE" value="swd_test_db"/>
+                <server name="CACHE_DRIVER" value="redis"/>
+                <server name="MAIL_MAILER" value="array"/>
+                <server name="QUEUE_CONNECTION" value="sync"/>
+                <server name="SESSION_DRIVER" value="array"/>
+                <server name="TELESCOPE_ENABLED" value="false"/>
+                <server name="OTP_ENABLED" value="true"/>
+                <server name="REQUESTS_XHPROF" value="false"/>
+                <server name="QUERIES_DEBUG" value="false"/>
+                <server name="REQUESTS_DEBUG" value="false"/>
+                <server name="TEST_RESPONSE_LOGGER_ENABLED" value="false"/>
+                <server name="APP_DEBUG" value="false"/>
+                <server name="API_DEBUG" value="false"/>
+      </php>
+</phpunit>

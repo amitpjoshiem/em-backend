@@ -1,0 +1,11 @@
+{
+    "name": "apiato/system-status",
+    "description": "Health Check Container.",
+    "type": "apiato-container",
+    "require": {
+        "sentry/sentry-laravel": "^2.5"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    }
+}

@@ -1,0 +1,1 @@
+* * * * * /usr/bin/php8.0 /var/www/html/artisan schedule:run
