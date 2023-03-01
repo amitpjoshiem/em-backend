@@ -1,0 +1,6 @@
+{
+  "name": "apiato/client",
+  "description": "Client Container for apiato.",
+  "require": {
+  }
+}

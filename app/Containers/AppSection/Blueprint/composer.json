@@ -1,0 +1,6 @@
+{
+  "name": "apiato/blueprint",
+  "description": "Blueprint Container for apiato.",
+  "require": {
+  }
+}

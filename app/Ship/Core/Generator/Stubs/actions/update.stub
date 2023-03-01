@@ -1,0 +1,22 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Containers\{{section-name}}\{{container-name}}\Actions;
+
+use App\Containers\{{section-name}}\{{container-name}}\Data\Transporters\Update{{model}}Transporter;
+use App\Containers\{{section-name}}\{{container-name}}\Models\{{model}};
+use App\Containers\{{section-name}}\{{container-name}}\Tasks\Update{{model}}Task;
+use App\Ship\Parents\Actions\Action;
+
+class Update{{model}}Action extends Action
+{
+    public function run(Update{{model}}Transporter ${{entity}}Data): {{model}}
+    {
+        $input = ${{entity}}Data->sanitizeInput([
+            // add your request data here
+        ]);
+
+        return app(Update{{model}}Task::class)->run(${{entity}}Data->id, $input);
+    }
+}

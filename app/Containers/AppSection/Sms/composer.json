@@ -1,0 +1,6 @@
+{
+  "name": "apiato/sms",
+  "description": "Sms Container for apiato.",
+  "require": {
+  }
+}

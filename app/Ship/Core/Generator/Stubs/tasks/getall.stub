@@ -1,0 +1,22 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Containers\{{section-name}}\{{container-name}}\Tasks;
+
+use App\Containers\{{section-name}}\{{container-name}}\Data\Repositories\{{model}}Repository;
+use App\Ship\Parents\Tasks\Task;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
+
+class GetAll{{models}}Task extends Task
+{
+    public function __construct(protected {{model}}Repository $repository)
+    {
+    }
+
+    public function run(bool $skipPagination = false): Collection | LengthAwarePaginator
+    {
+        return $skipPagination ? $this->repository->all() : $this->repository->paginate();
+    }
+}

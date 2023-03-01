@@ -1,0 +1,6 @@
+{
+  "name": "apiato/salesforce",
+  "description": "Salesforce Container for apiato.",
+  "require": {
+  }
+}

@@ -1,0 +1,39 @@
+ 0. Нужно создать таблицу otps добавить такие поля: id, uuid (это поле будем возвращать в cookies), user_id, oauth_access_token_id (string), revoked (bool), created_at, updated_at, expires_at (date, null)
+   Нужно создать таблицу otp_securities добавить такие поля: id, user_id, secret, service_type (like class namespace), created_at, updated_at
+
+   Важно авто-сгенерированные токены генерить не чаще 1 раз в минуту и срок жизни у них должен быть не дольше 5 минут из соображений безопасности
+
+1. Логинимся
+2. Возвращаем токен
+3. В Otp Container есть CheckOtpEventHandler который прослушивает событие логина AccessTokenCreated
+4. В методе handler запускаем:
+   - проверку есть ли у юзера otp_secret, (если нет, то генерируем его и записываем в таблицу otp_securities, так же заполняем service_type из config-ов по умолчанию), возвращаем объект otp_securities
+   - далее через otpRepository проверяем есть ли у юзера OTP и если записи нет, или этот OTP isOtpRevoked === true, то
+   - то у объекта otp_securities, через псевдо связь (service_type), вызываем метод otpService (внутри делаем просто return new $this->service_type; он возвращает нужный сервис), и вызываем у выбранного сервиса метод resolveOTP
+5. В resolveOTP, в зависимости от его реализации (EmailOtpService, Google2FaOtpService), как контракта OtpService, мы генерируем totp_token и отправляем его через нужный сервис, методом send()
+6. Для авто-сгенерированных токенов мы создаем в Redis запись с ключом "$user_id:$oauth_access_token_id", значением totp_token, и TTL из config('totp_ttl').
+   Это нужно, для того что-бы юзер мог работать только с одним токеном, а так как их можно генерить раз в минуту и срок их жизни больше то используем Redis/
+7. Юзер берет totp_token с email, или другого otp сервиса, вводит его, и отправляет на бек через POST /otps/verify (в роут добавляем middleware на тротлинг и на то, что это не гость)
+8. Добавляем request на прием totp_token в request (required|digits:config('number_of_digits')),
+9. Далее в Action, валидируем totp_token на совпадение с secret
+10. В том же Action проверяем если токен авто-сгенерированный (определяем по текущему service_type), то ищем его в Redis и если токен не найден то OptAuthenticationException (403);
+11. В том же Action добавляем запись в таблицу otps: user_id, uuid, oauth_access_token_id, expires_at (такое же значение, как и в oauth_access_token) именно через эту таблицу будут идти все проверки
+12. Возвращаем фронту 204
+13. Фронт переходит на главную страницу
+14. Далее переопределяем класс TokenGuard, а точнее метод user в нем, после валидации bearer token,
+    мы смотрим в таблицу otps, по текущему user_id и oauth_access_token_id и проверяем не expired ли мы еще и не revoked, если да то запускаем logout, и запускаем task на revoking otp
+    Далее если все ок то добавляем в HttpOnly cookies (x-otp-token), наш закодированный uuid, его потом нам будет фронт пересылать при каждом запросе.
+15. Для refresh token,
+    Так как мы слушаем events AccessTokenCreated в CheckOtpEventHandler, и у нас в нем прокинут Request, и otpRepository
+    Далее проверяем cookies уникальный сгенерированный uuid токена, и по нему делаем $this->otpRepository->revokeOtpTokenByUuid($uuid);
+    И генерим для нового $tokenId, следующий otp.
+16. Для logout, переделать Action ApiLogoutAction, добавив туда app(OtpRepository::class)->revokeOtpTokenByAccessTokenId($tokenId);
+    ну или event там тригерить а по нему удалять, уже в контейнере Otp, что более правильно.
+17. Создать роут на переключение способов прохождения OTP, PUT /otps (in body on of type = [google_2fa, email]), при переключении нужно перегенеривать secret код
+18. Создать роут на получение secret кода OTP (['qrCode' => $secret]), для формирования на фронте линки вида ('otpauth://totp/someUserName(site.com)?secret=' + qrCode) для формирования самого qrCode
+
+
+подумать над добавлением списка reserved topt_token для работы если отсутствует интернет
+
+
+

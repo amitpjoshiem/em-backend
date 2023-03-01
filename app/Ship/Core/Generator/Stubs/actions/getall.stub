@@ -1,0 +1,22 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Containers\{{section-name}}\{{container-name}}\Actions;
+
+use App\Containers\{{section-name}}\{{container-name}}\Models\{{model}};
+use App\Containers\{{section-name}}\{{container-name}}\Tasks\GetAll{{models}}Task;
+use App\Ship\Parents\Actions\Action;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
+
+class GetAll{{models}}Action extends Action
+{
+    /**
+     * @return Collection|{{model}}[]|LengthAwarePaginator
+     */
+    public function run(): Collection | array | LengthAwarePaginator
+    {
+        return app(GetAll{{models}}Task::class)->addRequestCriteria()->run();
+    }
+}
