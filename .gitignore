@@ -1,0 +1,77 @@
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# private.md for local passwords etc
+private.md
+
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+storage/logs/laravel.log
+/public/api-rendered-markdowns/*
+/public/api/
+/public/uploads/
+/laradock*/
+_ide_helper*.php
+.phpstorm.meta.php
+_ide_helper_models.php
+.php_cs.cache
+/.vagrant
+/.idea
+/.vscode
+/local_conf
+docker_logs.log
+/docker/volumes
+/public/documentation*
+/public/assets
+/secret-keys
+
+app/Containers/AppSection/Test
+
+app/Containers/Vendor
+database/schema/
+docker/centrifugo/config.json
+laravel-redis-ui
+ssl-certificates
+
+docker-compose.override.yml
+docker/nginx/local_templates
+docker/php/local.Dockerfile
+docker/php/conf.d/xdebug_local.ini
+
+local_psalm.xml
+.php-cs-fixer.cache
+test.txt

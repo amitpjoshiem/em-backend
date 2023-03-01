@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Containers\{{section-name}}\{{container-name}}\Tests;
+
+use App\Containers\{{section-name}}\{{container-name}}\Tests\TestCase;
+
+/**
+ * Class {{class-name}}.
+ *
+ * This is the container CLI TestCase class. Use this class to add your container specific CLI related helper functions.
+ */
+class {{class-name}} extends TestCase
+{
+    // ..
+}

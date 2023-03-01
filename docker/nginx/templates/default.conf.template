@@ -1,0 +1,59 @@
+server {
+    listen 80;
+    root /var/www/html/public;
+    server_name _;
+
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Content-Type-Options "nosniff";
+
+    index index.html index.htm index.php;
+
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    error_page 404 /index.php;
+
+    location ~ \.php$ {
+        fastcgi_pass ${API_HOST}:9000;
+        fastcgi_index index.php;
+        fastcgi_send_timeout 900;
+        fastcgi_read_timeout 900;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    # prevent Nginx from serving files starting with a dot (.htaccess, .svn, .git, and others)
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+
+    # Static files cache
+    location ~* \.(css|js|ac3|avi|bmp|bz2|cue|dat|doc|docx|dts|eot|exe|flv|gif|gz|htm|html|ico|img|iso|jpeg|jpg|mkv|mp3|mp4|mpeg|mpg|ogg|pdf|png|ppt|pptx|rar|rm|svg|swf|tar|tgz|ttf|wav|woff|woff2|xls|xlsx|zip)$ {
+        gzip_static on;
+        access_log  off;
+        expires     max;
+
+        add_header Pragma public;
+        add_header ETag "";
+        add_header Cache-Control "max-age=31449600, no-transform, public";
+        add_header Access-Control-Allow-Origin "*";
+
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ ^/(docs/|phpinfo|log-viewer|horizon|telescope|prequel|redis-ui) {
+        auth_basic "Restricted Area";
+        auth_basic_user_file /etc/nginx/htpasswd/.htpasswd;
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+     client_body_buffer_size 256M;
+     client_max_body_size    256M;
+}

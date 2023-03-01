@@ -1,0 +1,16 @@
+{
+    "name": "apiato/settings-container",
+    "description": "An Apiato container which helps store and retrieving key values",
+    "type": "apiato-container",
+    "license": "MIT",
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    },
+    "extra": {
+        "apiato": {
+            "container": {
+                "name": "Settings"
+            }
+        }
+    }
+}

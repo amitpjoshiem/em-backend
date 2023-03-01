@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Ship\Core\Commands;
+
+use App\Ship\Core\Abstracts\Commands\ConsoleCommand;
+use Illuminate\Support\Facades\Config;
+
+class SeedDeploymentDataCommand extends ConsoleCommand
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'apiato:seed-deploy';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Seed data for initial deployment.';
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    public function handle(): void
+    {
+        $this->call('db:seed', [
+            '--class' => Config::get('apiato.seeders.deployment'),
+        ]);
+
+        $this->info('Deployment Data Seeded Successfully.');
+    }
+}

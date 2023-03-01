@@ -1,0 +1,14 @@
+Dear Customer,
+
+A new login attempt was detected for username: dmitry.vovk
+
+This login attempt requires two-factor authentication.
+
+Your passcode is: 237767
+
+Please note that this passcode is one-time use and a new passcode can only be generated once every minute. If subsequent passcodes are generated, only the most recent passcode is valid.
+
+You are receiving a two-factor passcode as a requirement of your account's security rules for access from IP address 82.207.122.207
+
+Thank you,
+Authentication Services

@@ -1,0 +1,11 @@
+{
+  "name": "apiato/media-uploader",
+  "description": "This package used to upload files using laravel-media-library",
+  "require": {
+      "league/flysystem-aws-s3-v3": "~1.0",
+      "spatie/laravel-medialibrary": "^9.5",
+      "league/flysystem-cached-adapter": "~1.0",
+      "php-ffmpeg/php-ffmpeg": "^0.17",
+      "doctrine/cache": "^1.12.1"
+  }
+}

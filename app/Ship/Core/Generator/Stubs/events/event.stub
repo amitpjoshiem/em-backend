@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Containers\{{section-name}}\{{container-name}}\Events\Events;
+
+use App\Containers\{{section-name}}\{{container-name}}\Models\{{model}};
+use Illuminate\Queue\SerializesModels;
+use App\Ship\Parents\Events\Event;
+
+class {{class-name}} extends Event
+{
+    use SerializesModels;
+
+    public function __construct(public {{model}} $entity)
+    {
+    }
+
+    /**
+     * Get the channels the event should be broadcast on.
+     */
+    public function broadcastOn(): array
+    {
+        return [];
+    }
+}

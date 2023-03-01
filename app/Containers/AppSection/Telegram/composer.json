@@ -1,0 +1,6 @@
+{
+  "name": "apiato/telegram",
+  "description": "Telegram Container for apiato.",
+  "require": {
+  }
+}
