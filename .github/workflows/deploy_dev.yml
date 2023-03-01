@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        app-name: ['em-backend']
-        s3-bucket: ['em-code-deploy']
-        s3-filename: ['em-code-deploy-${{ github.sha }}']
-        deploy-group: ['dev']
+        app-name: ["em-backend"]
+        s3-bucket: ["em-code-deploy"]
+        s3-filename: ["em-code-deploy-${{ github.sha }}"]
+        deploy-group: ["dev"]
     steps:
       - uses: actions/checkout@v2
 
