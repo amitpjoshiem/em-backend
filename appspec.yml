@@ -2,9 +2,9 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/swd-backend
+    destination: /home/ubuntu/em-backend
 permissions:
-  - object: /home/ubuntu/swd-backend
+  - object: /home/ubuntu/em-backend
     owner: ubuntu
     group: ubuntu
     type:
