@@ -93,7 +93,7 @@
     <body>
 
     <div class="login-page">
-        <h1 class="center">Login</h1>
+        <h1 class="center">Admin Login Page</h1>
         <div class="form">
             <form class="login-form" action="{{route('login_post_form')}}" method="post">
                 {{ csrf_field() }}
